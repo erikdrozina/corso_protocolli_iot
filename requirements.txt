@@ -1,0 +1,6 @@
+# client
+requests
+
+# server
+flask
+flask_restful
