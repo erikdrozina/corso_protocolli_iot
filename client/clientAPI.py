@@ -1,43 +1,43 @@
+import random
 import requests
+from sensors.sensor_battery import GetBattery
+from sensors.sensor_position import GetPosition
+from sensors.sensor_temperature import GetTemperature
+from sensors.sensor_velocity import GetVelocity
 
-# base url
-url = "https://localhost:5000/api"
+import sensors
 
+# server url
+url = "http://localhost:5000/api"
 
-def get_drones():   # list of drones out
-    # GET /drones
-    res = requests.get(f"{url}/drones")
-    print(res)
-    resj = res.json()
-    for key, value in resj.items():
-        if key == 0:
-            print(f"Total drones out: {key[TotalDronesOut]}")
-        else:
-            print(
-                f"IdDrone: {key[IdDrone]} to {key['IdClient']} for {key[TimeAvailable]}")
+# drones available
+n_drones = 10
 
 
-def get_droneById(id):  # info about the drone by id
-    # GET /drone/{id}
-    res = requests.get(f"{url}/drone/{id}")
-    print(res)
-    resj = res.json()
-    print(
-        f"Drone ID: {resj[IdDrone]}\n\
-        Position: {resj[Position]}\n\
-        Status: {resj['Status']} since {resj['Status'][Time]}\n\
-        Client: {resj['IdClient']}")
+# example drone data
+# data = {
+#     "Status": 0,
+#     "Position": [0, 0, 0],
+#     "Temperature": 0,
+#     "Velocity": 0,
+#     "Battery": 0,
+# }
 
 
-def get_clientById(id):
-    # GET /client/{id}
-    res = requests.get(f"{url}/client/{id}")
-    print(res)
-    resj = res.json()
-    print(
-        f"Client ID: {resj[IdClient]}\n\
-        Name: {resj['Name']}\n\
-        Surname: {resj['Surname']}\n\
-        Total Drones out: {resj[Drones][TotalNumber]}")
-    for i in resj[Drones][IdDrone]:
-        print(f"Drone ID: {i}")
+def post_droneById(id):
+    # set randomly the status of the drone as it's "virtual", if on or off
+    drone_status = random.randint(0, 1)
+    data = {}
+    if id < n_drones and drone_status:
+        data = {
+            "Status": drone_status,
+            "Position": GetPosition(id),
+            "Temperature": GetTemperature(id),
+            "Velocity": GetVelocity(id),
+            "Battery": GetBattery(id),
+        }
+    return print(data)
+
+
+if __name__ == "__main__":
+    post_droneById(1)
