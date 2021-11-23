@@ -1,18 +1,11 @@
-import random
-import requests
+import datetime
+import time
+import random as rnd
+import requests as rq
 from sensors.sensor_battery import GetBattery
 from sensors.sensor_position import GetPosition
 from sensors.sensor_temperature import GetTemperature
 from sensors.sensor_velocity import GetVelocity
-
-import sensors
-
-# server url
-url = "http://localhost:5000/api"
-
-# drones available
-n_drones = 10
-
 
 # example drone data
 # data = {
@@ -21,23 +14,30 @@ n_drones = 10
 #     "Temperature": 0,
 #     "Velocity": 0,
 #     "Battery": 0,
+#     "LastUpdate": '1970-01-01_00:00:00'
 # }
 
 
-def post_droneById(id):
+def patch_droneById(id):
+    global url
+    # get date and time from datetime
+    now = datetime.datetime.now()
     # set randomly the status of the drone as it's "virtual", if on or off
-    drone_status = random.randint(0, 1)
-    data = {}
-    if id < n_drones and drone_status:
-        data = {
-            "Status": drone_status,
-            "Position": GetPosition(id),
-            "Temperature": GetTemperature(id),
-            "Velocity": GetVelocity(id),
-            "Battery": GetBattery(id),
-        }
+    data = {
+        "Status": rnd.randint(0, 1),
+        "Position": GetPosition(id),
+        "Temperature": GetTemperature(id),
+        "Velocity": GetVelocity(id),
+        "Battery": GetBattery(id),
+        "LastUpdate": now.strftime("%Y-%m-%d_%H:%M:%S"),
+    }
+    rq.patch(f"{url}/v1/drone/{id}", data)
     return print(data)
 
 
 if __name__ == "__main__":
-    post_droneById(1)
+    # server url
+    url = "http://localhost:5000/api"
+    while 1:
+        patch_droneById(1)
+        time.sleep(5)
