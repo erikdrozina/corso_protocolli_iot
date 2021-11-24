@@ -1,4 +1,5 @@
 import datetime
+import json
 import time
 import random as rnd
 import requests as rq
@@ -40,20 +41,20 @@ def get_data(id):
 
 
 # handle the requests and eventually its exceptions
-def send_request(method, url, data=""):
+def send_request(method, url, resdata={}):
     try:
         # each method return a status code
         if method == 'GET':
             tmp = rq.get(url)
             return tmp.status_code
         elif method == 'POST':
-            tmp = rq.post(url, data)
+            tmp = rq.post(url, json=resdata)
             return tmp.status_code
         elif method == 'PUT':
-            tmp = rq.put(url, data)
+            tmp = rq.put(url, json=resdata)
             return tmp.status_code
         elif method == 'PATCH':
-            tmp = rq.patch(url, data)
+            tmp = rq.patch(url, json=resdata)
             return tmp.status_code
         else:
             raise SystemExit(rq.exceptions.RequestException)
@@ -72,8 +73,9 @@ def send_request(method, url, data=""):
 # POST /v1/drone/drone_id
 def post_droneById(drone_id):
     global url
-    res_data = get_data(id)
-    s_code = send_request('POST', f"{url}/v1/drone/{drone_id}", res_data)
+    res_data = get_data(drone_id)
+    datajson = json.dumps(res_data)
+    s_code = send_request('POST', f"{url}/v1/drone", datajson)
     return print(f"CODE {s_code}, {res_data}")
 
 
