@@ -9,9 +9,13 @@ app = Flask(__name__)
 
 drones = [
     {
-        'IdDrone':0,
-        'Position': 0,
-        'IdClient': 0
+        "IdDrone": 0,
+        "Status": 0,
+        "Position": [0, 0, 0],
+        "Temperature": 0,
+        "Velocity": 0,
+        "Battery": 0,
+        "Time": '1970-01-01_00:00:00'
     }
 ]
 
@@ -30,14 +34,18 @@ drones = [
 def index():
     return "Hello, World!"
 
-@app.route('/api/v1/resources/drone/', methods=['POST'])
+@app.route('/api/v1/drone', methods=['POST'])
 def api_POST():
     if not request.json or not 'IdDrone' in request.json:
         abort(400)
     drone = {
         'IdDrone': request.json['IdDrone'],
+        'Status': request.json['Status'],
         'Position': request.json['Position'],
-        'IdClient': request.json['IdClient']
+        'Temperature': request.json['Temperature'],
+        'Velocity': request.json['Velocity'],
+        'Battery': request.json['Battery'],
+        'Time': request.json['Time'],
     }
     drones.append(drone)
     return jsonify({'drone':drone}),201
