@@ -21,37 +21,44 @@ drones = [
 
 # class Data(Resource):
 #     def get(self):
-#         parser = reqparse.RequestParser() 
-        
-#         parser.add_argument('IdDrone', required=True) 
+#         parser = reqparse.RequestParser()
+
+#         parser.add_argument('IdDrone', required=True)
 #         parser.add_argument('Position', required=True)
 #         parser.add_argument('', required = True)
 #         parser.add_argument('IdClient', required=True)
-        
+
 # api.add_resource(Data, "/data")
 # if __name__ == '__main__':
+
+
 @app.route('/')
 def index():
     return "Hello, World!"
+
 
 @app.route('/api/v1/drone', methods=['POST'])
 def api_POST():
     if not request.json or not 'IdDrone' in request.json:
         abort(400)
+    reqjson = json.loads(request.json)
     drone = {
-        'IdDrone': request.json['IdDrone'],
-        'Status': request.json['Status'],
-        'Position': request.json['Position'],
-        'Temperature': request.json['Temperature'],
-        'Velocity': request.json['Velocity'],
-        'Battery': request.json['Battery'],
-        'Time': request.json['Time'],
+        'IdDrone': reqjson['IdDrone'],
+        'Status': reqjson['Status'],
+        'Position': reqjson['Position'],
+        'Temperature': reqjson['Temperature'],
+        'Velocity': reqjson['Velocity'],
+        'Battery': reqjson['Battery'],
+        'Time': reqjson['Time'],
     }
     drones.append(drone)
-    return jsonify({'drone':drone}),201
+    return jsonify({'drone': drone}), 201
+
 
 @app.route('/api/v1/drones', methods=['GET'])
 def api_GetAll():
-    return jsonify({'drones':drones})
+    return jsonify({'drones': drones})
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
