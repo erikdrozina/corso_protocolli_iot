@@ -11,7 +11,7 @@ from sensors.sensor_velocity import GetVelocity
 
 # example drone data
 # data = {
-#     "IdDronw": 0
+#     "IdDrone": 0
 #     "Status": 0,
 #     "Position": [0, 0, 0],
 #     "Temperature": 0,
@@ -60,7 +60,7 @@ def send_request(method, url, resdata={}):
             raise SystemExit(rq.exceptions.RequestException)
     except rq.exceptions.Timeout:
         print(Fore.RED+"Connection timeout, retrying..."+Fore.RESET)
-        send_request(method, url, data="")
+        send_request(method, url, resdata)
     except rq.exceptions.TooManyRedirects:
         print(
             Fore.RED+"Bad url, check it is indeed correct or try a different one"+Fore.RESET)
@@ -81,7 +81,7 @@ def post_droneById(drone_id):
 
 if __name__ == "__main__":
     # server url
-    url = "http://localhost:5000/api"
+    url = "http://192.168.104.55:5000/api"
     # drone id that sends data to the server
     drone_id = 1
 
