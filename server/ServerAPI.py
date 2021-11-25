@@ -19,18 +19,6 @@ drones = [
     }
 ]
 
-# class Data(Resource):
-#     def get(self):
-#         parser = reqparse.RequestParser()
-
-#         parser.add_argument('IdDrone', required=True)
-#         parser.add_argument('Position', required=True)
-#         parser.add_argument('', required = True)
-#         parser.add_argument('IdClient', required=True)
-
-# api.add_resource(Data, "/data")
-# if __name__ == '__main__':
-
 
 @app.route('/')
 def index():
@@ -49,7 +37,7 @@ def api_POST():
         'Temperature': reqjson['Temperature'],
         'Velocity': reqjson['Velocity'],
         'Battery': reqjson['Battery'],
-        'Time': reqjson['Time'],
+        'Time': reqjson['Time']
     }
     drones.append(drone)
     return jsonify({'drone': drone}), 201
@@ -61,4 +49,4 @@ def api_GetAll():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(host='0.0.0.0')
