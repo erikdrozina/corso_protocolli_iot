@@ -3,4 +3,4 @@ requests
 
 # server
 flask
-flask_restful
+psycopg2
