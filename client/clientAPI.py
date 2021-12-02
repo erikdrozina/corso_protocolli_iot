@@ -1,15 +1,13 @@
-import datetime
 import json
 import time
-import random as rnd
 import os, sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../common')
 from requests_manager import send_request
-from genereate_data import get_sensors_data
+from generate_data import get_sensors_data
 
 
-# POST /v1/drone/drone_id
+# POST /v1/drone
 def post_droneById(drone_id):
     global url
     datajson = json.dumps(get_sensors_data(drone_id))

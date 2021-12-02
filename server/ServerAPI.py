@@ -1,43 +1,16 @@
 import json
 from flask import Flask, abort, request
 from flask.json import jsonify
-import psycopg2
+import os, sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(f'{dir_path}/../common')
+from database_actions import insert_drone_data
 
 # https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
 # link documentazione tutorial
 app = Flask(__name__)
 
-
-drones = [
-    {
-        "IdDrone": 0,
-        "Status": 0,
-        "Position": [0, 0, 0],
-        "Temperature": 0,
-        "Velocity": 0,
-        "Battery": 0,
-        "Time": '1970-01-01_00:00:00'
-    }
-]
-
-
-def insert(drone):
-    conn = None
-    try:
-        print("Connecting to DB")
-        conn = psycopg2.connect(
-            host="192.168.104.150",
-            port="5432",
-            database="iotdb",
-            user="iot",
-            password="iot")
-        cursor = conn.cursor()
-        cursor.execute("INSERT")  # query
-        print("inserted")
-        conn.commit()
-        conn.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+drones = []
 
 
 @app.route('/')
@@ -59,7 +32,7 @@ def api_POST():
         'Battery': reqjson['Battery'],
         'Time': reqjson['Time']
     }
-    insert(drone)
+    insert_drone_data(drone)
     drones.append(drone)
     return jsonify({'drone': drone}), 201
 
