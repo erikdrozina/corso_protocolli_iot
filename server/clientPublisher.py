@@ -11,7 +11,7 @@ from generate_data import get_command_data
 # send sensors data to broker
 def publish_droneById(drone_id):
     datajson = json.dumps(get_command_data(drone_id))
-    topic = f"iot/drone_{drone_id}/commands"
+    topic = f"iot/drone/{drone_id}/commands"
     client.publish(topic=topic, payload=datajson)
     print(f"Sent '{datajson}' to topic {topic}")
 
