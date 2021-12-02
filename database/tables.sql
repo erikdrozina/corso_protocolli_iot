@@ -6,7 +6,7 @@ create table clients(
 );
 
 create table drones(
-    id serial not null,
+    id serial primary key,
     status integer not null,
     position_x integer not null,
     position_y integer not null,
@@ -14,6 +14,14 @@ create table drones(
     temperature integer not null,
     velocity integer not null,
     battery integer not null,
-    time timestamp not null,
-    idClient integer references clients(id)
+    time timestamp not null
+    );
+
+create table rents(
+    id serial primary key,
+    idDrone integer references drones(id),
+    idClient integer references clients(id),
+    start_rent timestamp not null,
+    end_rent timestamp,
+    cost decimal
 );
