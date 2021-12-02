@@ -14,7 +14,7 @@ create table drones(
     temperature integer not null,
     velocity integer not null,
     battery integer not null,
-    time timestamp not null
+    time varchar(24) not null
     );
 
 create table rents(
