@@ -4,3 +4,6 @@ requests
 # server
 flask
 psycopg2
+
+# mqtt
+paho-mqtt
