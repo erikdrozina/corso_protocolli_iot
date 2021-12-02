@@ -3,7 +3,7 @@ import random as rnd
 import datetime
 import json
 import sys
-import os 
+import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../common')
 from requests_manager import send_request
@@ -35,7 +35,7 @@ def post_command(drone_id):
 
 if __name__ == "__main__":
     # server url
-    url = "http://localhost:5010/api"
+    url = "http://192.168.104.150:5010/api"
     # drone id that sends data to the server
     drone_id = 1
 

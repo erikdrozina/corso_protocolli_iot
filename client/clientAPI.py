@@ -41,7 +41,7 @@ def post_droneById(drone_id):
 
 if __name__ == "__main__":
     # server url
-    url = "http://localhost:5000/api"
+    url = "http://192.168.104.55:5000/api"
     # drone id that sends data to the server
     drone_id = 1
 
