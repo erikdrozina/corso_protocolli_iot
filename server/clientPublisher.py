@@ -6,12 +6,12 @@ import os
 import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../common')
-from generate_data import get_sensors_data
+from generate_data import get_command_data
 
 # send sensors data to broker
 def publish_droneById(drone_id):
-    datajson = json.dumps(get_sensors_data(drone_id))
-    topic = f"iot/drone_{drone_id}/sensors"
+    datajson = json.dumps(get_command_data(drone_id))
+    topic = f"iot/drone_{drone_id}/commands"
     client.publish(topic=topic, payload=datajson)
     print(f"Sent '{datajson}' to topic {topic}")
 

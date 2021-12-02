@@ -3,10 +3,11 @@ from paho.mqtt.client import Client
 client = Client(client_id="controlCenter")
 client.connect("192.168.104.150")
 
-client.subscribe('iot/drone_1/sensors')
+# name of the topic the client subscribe to
+client.subscribe('iot/drone_1/commands', qos=1)
 
 def on_message(client, userdata,message):
-    print("message received " ,str(message.payload.decode("utf-8")))
+    print(f"Message received from topic {message.topic}: " ,str(message.payload.decode("utf-8")))
 
 
 def run():
