@@ -21,8 +21,7 @@ def send_request(method, url, resdata={}):
         else:
             raise SystemExit(rq.exceptions.RequestException)
     except rq.exceptions.Timeout:
-        print(Fore.RED+"Connection timeout, retrying..."+Fore.RESET)
-        send_request(method, url, resdata)
+        print(Fore.RED+"Connection timeout, retry later"+Fore.RESET)
     except rq.exceptions.TooManyRedirects:
         print(
             Fore.RED+"Bad url, check it is indeed correct or try a different one"+Fore.RESET)
