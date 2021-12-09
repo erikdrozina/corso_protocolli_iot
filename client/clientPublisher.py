@@ -9,10 +9,18 @@ from generate_data import get_sensors_data
 
 # send sensors data to broker
 def publish_droneById(drone_id):
-    datajson = json.dumps(get_sensors_data(drone_id))
+    data, status = get_sensors_data(drone_id)
+    datajson = json.dumps(data)
     topic = f"iot/drone/{drone_id}/sensors"
     client.publish(topic=topic, payload=datajson)
     print(f"Sent '{datajson}' to topic {topic}")
+    if status: 
+        time.sleep(5)
+    else:
+        time.sleep(10)
+        print("Drone status: offline")
+
+    
 
 
 if __name__ == "__main__":
@@ -22,4 +30,4 @@ if __name__ == "__main__":
 
     while 1:
         publish_droneById(drone_id)
-        time.sleep(5)
+        
