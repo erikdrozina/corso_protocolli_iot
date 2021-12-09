@@ -1,4 +1,3 @@
-
 from paho.mqtt.client import Client
 import json
 import time
