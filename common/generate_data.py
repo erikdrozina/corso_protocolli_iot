@@ -25,7 +25,10 @@ def get_sensors_data(id):
         "Battery": GetBattery(id),
         "Time": now.strftime("%Y-%m-%d_%H:%M:%S"),
     }
-    return data
+    if tmp == 1:
+        return data, True
+    else:
+        return data, False
 
 
 # obtain data from virtual sensors
