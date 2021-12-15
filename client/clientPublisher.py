@@ -12,7 +12,7 @@ def publish_droneById(drone_id):
     data, status = get_sensors_data(drone_id)
     datajson = json.dumps(data)
     topic = f"iot/drone/{drone_id}/sensors"
-    client.publish(topic, datajson, 0)
+    client.publish(topic, datajson, 1, True)
     print(f"Sent '{datajson}' to topic {topic}")
     if status: 
         time.sleep(5)
