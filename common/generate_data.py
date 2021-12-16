@@ -25,6 +25,8 @@ def get_sensors_data(id):
         "Battery": GetBattery(id),
         "Time": now.strftime("%Y-%m-%d_%H:%M:%S"),
     }
+    # if the drone is on also return True, otherwise return False
+    # it's used to check if the drone is on or off
     if tmp == 1:
         return data, True
     else:
