@@ -1,10 +1,9 @@
 # client_put.py
 import asyncio
-import random
- 
+import time 
 from aiocoap import *
-from aiocoap import resource
- 
+
+
 async def main():
     ipaddress = 'localhost'
     # send GET request
@@ -21,4 +20,6 @@ async def main():
  
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(main())
+    while(True):
+        asyncio.run(main())
+        time.sleep(5)
