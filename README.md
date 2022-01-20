@@ -5,39 +5,16 @@
 - [Erik Drozina](https://github.com/erikdrozina)
 - [Rudi Folla](https://github.com/FollaRudi)
 
+## **AMQP**
 
-## **MQTT**
-### **TOPICS**
-<u>iot/drone/{id}/sensors</u>
+### **CODE**
 
-Ascolta i dati provenienti dai sensori di un determinato drone.
+Per raccogliere i dati dei sensori, ogni drone manda i dati di telemetria nella stessa coda. Nei dati raccolti dal server, il primo paramentro corrisponde all'id del drone in modo tale da determinarne la provenienza.
 
+Per i comandi assegniamo una coda ad ogni drone in modo tale che ogni drone consumi solamente i comandi dalla corrispettiva coda.
 
-<u>iot/drone/{id}/command</u>
+### **EXCHANGE**
 
-Ascolta i comandi provenienti dal server ad un determinato drone.
+Come Excange usiamo un Headers Exchange che permette di instradare su più route specificate nell'attributo nel header del messaggio rispetto che nella routing key, ignorandola.
 
-Abbiamo suddiviso il drone e i suo id per due semplici motivi:
-- Se si vogliono sapere tutti i dati/comandi di tutti i droni basta usare `iot/drone/+/sensors` / `iot/drone/+/commands`
-- Se si vogliono sapere tutti i dati e comandi di un determinato drone basta usare `iot/drone/{id}/#` oppure di tutti i droni `iot/drone/#`
-
-### **QOS**
-I comandi hanno un QOS di 2 in modo tale che il comando venga mandato ed eseguito nel modo più affidabile possibile per evitare incidenti o infortuni.
-
-I dati dei sensori hanno un QOS di 0, se non vengono inviati al server le conseguenze sono minori.
-
-### **FLAGS**
-Il topic per ottenere i dati dei senori ha il flag ```retained``` a ```True``` in modo tale che appena un subscriber si connette al topic può ottenere gli utlimi dati dal broker stesso.
-
-Il subscriber che vuole ottenere i comandi ha il flag ```clean_session``` a ```True``` in modo tale che, una volta acceso il drone, non legga ed esegua i comandi inviati mentre era spento.
-
-### **SICUREZZA**
-Inanzitutto mettiamo dei paletti a chi e dove si può scrivere. 
-
-Per esempio, un drone potrà solamente pubblicare nel topic ```iot/drone/{id}/sensors```, non potrà pubblicare negli altri topic con altri id o nel topic destinato ai comandi.
-
-Un drone potrà iscriversi solamente al topic ```iot/drone/{id}/command``` per evitare che i comandi destinati ad un drone possano essere letti da un altro drone.
-
-I comandi possono essere mandati sul topic del drone solamente dal controllore abbinato al drone affidato all'utente al momento del noleggio e dai gestori del noleggio dei droni che possono mandare comandi da remoto.
-
-Successivamente instauriamo una connessione tramite VPN per rendere sicura la comunicazione dei dati e comandi dall'esterno.
+Come Exchange si comporta similmente ad un DIrect Exchange come performance e routing algorithm.
