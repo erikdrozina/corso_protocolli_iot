@@ -1,23 +1,27 @@
-from paho.mqtt.client import Client
 import json
 import time
 import os
 import sys
+import yaml
+import pika
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../common')
-from generate_data import get_sensors_data
+from generate_data import get_sensors_data  # noqa: E402
+
+
+def getCredentials():
+    credentials = yaml.safe_load(open('./client/credentials.yaml'))
+    user = credentials['user']
+    pwd = credentials['pwd']
+    return user, pwd
 
 
 # send sensors data to broker
 def publish_droneById(drone_id):
-    # obtain sensors data
     data, status = get_sensors_data(drone_id)
     datajson = json.dumps(data)
-    topic = f"iot/drone/{drone_id}/sensors"
-    # publish data to the topic declared above with qos 1 and retained flag enabled
-    client.publish(topic, datajson, 1, True)
-    print(f"Sent '{datajson}' to topic {topic}")
-    # if the drone is on send the data normally, if it's off send data less often
+    channel.basic_publish(exchange='', routing_key='test', body=datajson)
+    print("Message sent to consumer")
     if status:
         time.sleep(5)
     else:
@@ -26,11 +30,13 @@ def publish_droneById(drone_id):
 
 
 if __name__ == "__main__":
-    drone_id = 1
-    # set the device name, must be unique
-    client = Client(client_id=f"drone_{drone_id}")
-    # connect to the broker
-    client.connect("192.168.104.150")
+    user, pwd = getCredentials()
+    credentials = pika.PlainCredentials(user, pwd)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host='stingray.rmq.cloudamqp.com', credentials=credentials, virtual_host='akdjroei'))  # Connect to CloudAMQP
+    channel = connection.channel()  # start a channel
+    channel.queue_declare(queue='test')
 
+    drone_id = 1
     while 1:
         publish_droneById(drone_id)

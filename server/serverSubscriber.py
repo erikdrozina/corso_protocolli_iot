@@ -1,19 +1,30 @@
-from paho.mqtt.client import Client
-
-client = Client(client_id="ServerSub", clean_session=False)
-client.connect("192.168.104.150")
-
-# name of the topic the client subscribe to
-client.subscribe('iot/drone/1/sensors', 1)
+import pika
+import yaml
 
 
-def on_message(client, userdata, message):
-    print(f"Message received from topic {message.topic}: ", str(message.payload.decode("utf-8")))
+def getCredentials():
+    credentials = yaml.safe_load(open('./client/credentials.yaml'))
+    user = credentials['user']
+    pwd = credentials['pwd']
+    return user, pwd
 
 
 def run():
-    client.on_message = on_message
-    client.loop_forever()
+    user, pwd = getCredentials()
+    credentials = pika.PlainCredentials(user, pwd)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host='stingray.rmq.cloudamqp.com', credentials=credentials, virtual_host='akdjroei'))  # Connect to CloudAMQP
+    channel = connection.channel()  # start a channel
+    channel.queue_declare(queue='test')
+
+    def callback(ch, method, properties, body):
+        print("Received %r" % body)
+
+    channel.basic_consume(
+        queue='test', on_message_callback=callback, auto_ack=True)
+
+    print('Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()
 
 
 run()

@@ -5,7 +5,8 @@ import os
 import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../common')
-from generate_data import get_command_data
+from generate_data import get_command_data  # noqa: E402
+
 
 # send sensors data to broker
 def publish_droneById(drone_id):

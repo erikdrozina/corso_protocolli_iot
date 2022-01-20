@@ -1,12 +1,13 @@
 import datetime
 import random as rnd
-import os, sys
+import os
+import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(f'{dir_path}/../client')
-from sensors.sensor_battery import GetBattery
-from sensors.sensor_velocity import GetVelocity
-from sensors.sensor_position import GetPosition
-from sensors.sensor_temperature import GetTemperature
+from sensors.sensor_battery import GetBattery  # noqa: E402
+from sensors.sensor_velocity import GetVelocity  # noqa: E402
+from sensors.sensor_position import GetPosition  # noqa: E402
+from sensors.sensor_temperature import GetTemperature  # noqa: E402
 
 
 # obtain data from virtual sensors
@@ -37,7 +38,7 @@ def get_sensors_data(id):
 def get_command_data(id):
     # all possibl commands
     command_list = ['start', 'stop', 'up', 'down',
-                'forward', 'back', 'left', 'right']
+                    'forward', 'back', 'left', 'right']
     # get date and time from datetime
     now = datetime.datetime.now()
     # set randomly the status of the drone as it's "virtual", if on or off

@@ -18,7 +18,12 @@ function onConnect() {
 
 function onConnectionLost(responseObject) {
   if (responseObject.errorCode !== 0) {
-    console.log("Connection lost with " + clientId + " because " + responseObject.errorMessage);
+    console.log(
+      "Connection lost with " +
+        clientId +
+        " because " +
+        responseObject.errorMessage
+    );
   }
   client.connect({ onSuccess: onConnect });
 }
@@ -35,11 +40,14 @@ function onMessageArrived(message) {
   var mjson = JSON.parse(message.payloadString);
   var id = mjson["IdDrone"];
   document.getElementById("IdDrone" + id).innerHTML = mjson["IdDrone"];
-  document.getElementById("Status" + id).innerHTML = mjson["Status"] ? "On" : "Off";
+  document.getElementById("Status" + id).innerHTML = mjson["Status"]
+    ? "On"
+    : "Off";
   document.getElementById("Battery" + id).innerHTML = mjson["Battery"];
 
   if (mjson["Status"]) {
-    document.getElementById("box-drone" + id).style.backgroundColor = "lightgreen";
+    document.getElementById("box-drone" + id).style.backgroundColor =
+      "lightgreen";
   } else {
     document.getElementById("box-drone" + id).style.backgroundColor = "tomato";
   }

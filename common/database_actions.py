@@ -1,5 +1,6 @@
 import psycopg2
 
+
 def insert_drone_data(drone):
     conn = None
     try:
